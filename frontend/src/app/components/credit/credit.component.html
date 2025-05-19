@@ -1,0 +1,94 @@
+<div class="container mt-4">
+  <h2>Gestion des Crédits</h2>
+
+  <!-- Formulaire d'ajout/modification -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3>{{ isEditing ? 'Modifier Crédit' : 'Nouveau Crédit' }}</h3>
+      <form (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="clientId" class="form-label">Client</label>
+          <select class="form-select" id="clientId" [(ngModel)]="credit.clientId" name="clientId" required>
+            <option value="">Sélectionner un client</option>
+            <option *ngFor="let c of clients" [value]="c.id">{{ c.nom }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="type" class="form-label">Type de Crédit</label>
+          <select class="form-select" id="type" [(ngModel)]="credit.type" name="type" required (change)="onTypeChange()">
+            <option value="">Sélectionner un type</option>
+            <option value="PERSONNEL">Crédit Personnel</option>
+            <option value="IMMOBILIER">Crédit Immobilier</option>
+            <option value="PROFESSIONNEL">Crédit Professionnel</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="montant" class="form-label">Montant</label>
+          <input type="number" class="form-control" id="montant" [(ngModel)]="credit.montant" name="montant" required>
+        </div>
+        <div class="mb-3">
+          <label for="dureeRemboursement" class="form-label">Durée de Remboursement (mois)</label>
+          <input type="number" class="form-control" id="dureeRemboursement" [(ngModel)]="credit.dureeRemboursement" name="dureeRemboursement" required>
+        </div>
+        <div class="mb-3">
+          <label for="tauxInteret" class="form-label">Taux d'Intérêt (%)</label>
+          <input type="number" class="form-control" id="tauxInteret" [(ngModel)]="credit.tauxInteret" name="tauxInteret" required>
+        </div>
+        <!-- Champs spécifiques selon le type de crédit -->
+        <div *ngIf="credit.type === 'PERSONNEL' || credit.type === 'PROFESSIONNEL'" class="mb-3">
+          <label for="motif" class="form-label">Motif</label>
+          <input type="text" class="form-control" id="motif" [(ngModel)]="credit.motif" name="motif" required>
+        </div>
+        <div *ngIf="credit.type === 'IMMOBILIER'" class="mb-3">
+          <label for="typeBien" class="form-label">Type de Bien</label>
+          <select class="form-select" id="typeBien" [(ngModel)]="credit.typeBien" name="typeBien" required>
+            <option value="">Sélectionner un type</option>
+            <option value="APPARTEMENT">Appartement</option>
+            <option value="MAISON">Maison</option>
+            <option value="LOCAL_COMMERCIAL">Local Commercial</option>
+          </select>
+        </div>
+        <div *ngIf="credit.type === 'PROFESSIONNEL'" class="mb-3">
+          <label for="raisonSociale" class="form-label">Raison Sociale</label>
+          <input type="text" class="form-control" id="raisonSociale" [(ngModel)]="credit.raisonSociale" name="raisonSociale" required>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ isEditing ? 'Modifier' : 'Ajouter' }}</button>
+        <button type="button" class="btn btn-secondary ms-2" (click)="resetForm()">Annuler</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Liste des crédits -->
+  <div class="card">
+    <div class="card-body">
+      <h3>Liste des Crédits</h3>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Client</th>
+              <th>Type</th>
+              <th>Montant</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of credits">
+              <td>{{ c.id }}</td>
+              <td>{{ getClientName(c.clientId) }}</td>
+              <td>{{ c.type }}</td>
+              <td>{{ c.montant | currency:'EUR' }}</td>
+              <td>{{ c.statut }}</td>
+              <td>
+                <button class="btn btn-sm btn-warning me-2" (click)="editCredit(c)">Modifier</button>
+                <button class="btn btn-sm btn-danger" (click)="deleteCredit(c.id)">Supprimer</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

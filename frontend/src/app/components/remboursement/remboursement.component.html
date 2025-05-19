@@ -1,0 +1,61 @@
+<div class="container mt-4">
+  <h2>Gestion des Remboursements</h2>
+
+  <!-- Formulaire d'ajout/modification -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3>{{ isEditing ? 'Modifier Remboursement' : 'Nouveau Remboursement' }}</h3>
+      <form (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="creditId" class="form-label">Crédit</label>
+          <select class="form-select" id="creditId" [(ngModel)]="remboursement.creditId" name="creditId" required>
+            <option value="">Sélectionner un crédit</option>
+            <option *ngFor="let c of credits" [value]="c.id">{{ getCreditInfo(c.id) }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="dateRemboursement" class="form-label">Date de Remboursement</label>
+          <input type="date" class="form-control" id="dateRemboursement" [(ngModel)]="remboursement.dateRemboursement" name="dateRemboursement" required>
+        </div>
+        <div class="mb-3">
+          <label for="montant" class="form-label">Montant</label>
+          <input type="number" class="form-control" id="montant" [(ngModel)]="remboursement.montant" name="montant" required>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ isEditing ? 'Modifier' : 'Ajouter' }}</button>
+        <button type="button" class="btn btn-secondary ms-2" (click)="resetForm()">Annuler</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Liste des remboursements -->
+  <div class="card">
+    <div class="card-body">
+      <h3>Liste des Remboursements</h3>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Crédit</th>
+              <th>Date</th>
+              <th>Montant</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of remboursements">
+              <td>{{ r.id }}</td>
+              <td>{{ getCreditInfo(r.creditId) }}</td>
+              <td>{{ r.dateRemboursement | date:'dd/MM/yyyy' }}</td>
+              <td>{{ r.montant | currency:'EUR' }}</td>
+              <td>
+                <button class="btn btn-sm btn-warning me-2" (click)="editRemboursement(r)">Modifier</button>
+                <button class="btn btn-sm btn-danger" (click)="deleteRemboursement(r.id)">Supprimer</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

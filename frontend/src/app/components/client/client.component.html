@@ -1,0 +1,52 @@
+<div class="container mt-4">
+  <h2>Gestion des Clients</h2>
+
+  <!-- Formulaire d'ajout/modification -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3>{{ isEditing ? 'Modifier Client' : 'Nouveau Client' }}</h3>
+      <form (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="nom" class="form-label">Nom</label>
+          <input type="text" class="form-control" id="nom" [(ngModel)]="client.nom" name="nom" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" [(ngModel)]="client.email" name="email" required>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ isEditing ? 'Modifier' : 'Ajouter' }}</button>
+        <button type="button" class="btn btn-secondary ms-2" (click)="resetForm()">Annuler</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Liste des clients -->
+  <div class="card">
+    <div class="card-body">
+      <h3>Liste des Clients</h3>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of clients">
+              <td>{{ c.id }}</td>
+              <td>{{ c.nom }}</td>
+              <td>{{ c.email }}</td>
+              <td>
+                <button class="btn btn-sm btn-warning me-2" (click)="editClient(c)">Modifier</button>
+                <button class="btn btn-sm btn-danger" (click)="deleteClient(c.id)">Supprimer</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
