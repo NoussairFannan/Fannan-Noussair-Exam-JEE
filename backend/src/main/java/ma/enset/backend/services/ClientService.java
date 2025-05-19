@@ -13,6 +13,5 @@ public interface ClientService {
     void deleteClient(Long id);
     
     // Additional business operations
-    List<ClientDTO> searchClientsByName(String name);
     List<ClientDTO> getClientsWithCredits();
 }

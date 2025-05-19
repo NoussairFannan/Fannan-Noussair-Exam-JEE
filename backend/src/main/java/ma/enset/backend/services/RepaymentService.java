@@ -15,7 +15,5 @@ public interface RepaymentService {
     
     // Additional business operations
     List<RepaymentDTO> getRepaymentsByCreditId(Long creditId);
-    List<RepaymentDTO> getRepaymentsByDateRange(Date startDate, Date endDate);
     double calculateTotalRepaymentAmount(Long creditId);
-    double calculateRemainingAmount(Long creditId);
 }

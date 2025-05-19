@@ -46,7 +46,6 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDTO updateClient(ClientDTO clientDTO) {
-        // Check if client exists
         clientRepository.findById(clientDTO.getId())
                 .orElseThrow(() -> new RuntimeException("Client not found with id: " + clientDTO.getId()));
         
@@ -57,7 +56,6 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void deleteClient(Long id) {
-        // Check if client exists
         clientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Client not found with id: " + id));
         
@@ -65,19 +63,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public List<ClientDTO> searchClientsByName(String name) {
-        // This is a simple implementation. In a real application, you might want to use
-        // a more sophisticated search mechanism like Spring Data JPA's Specification or QueryDSL.
-        List<Client> clients = clientRepository.findAll().stream()
-                .filter(client -> client.getName().toLowerCase().contains(name.toLowerCase()))
-                .collect(Collectors.toList());
-        
-        return clients.stream()
-                .map(clientMapper::fromClient)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public List<ClientDTO> getClientsWithCredits() {

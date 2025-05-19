@@ -46,14 +46,12 @@ public class RepaymentServiceImpl implements RepaymentService {
     public RepaymentDTO saveRepayment(RepaymentDTO repaymentDTO) {
         Repayment repayment = repaymentMapper.toRepayment(repaymentDTO);
         
-        // Set credit if creditId is provided
         if (repaymentDTO.getCreditId() != null) {
             Credit credit = creditRepository.findById(repaymentDTO.getCreditId())
                     .orElseThrow(() -> new RuntimeException("Credit not found with id: " + repaymentDTO.getCreditId()));
             repayment.setCredit(credit);
         }
         
-        // Set default values if not provided
         if (repayment.getRepaymentDate() == null) {
             repayment.setRepaymentDate(new Date());
         }
@@ -64,13 +62,11 @@ public class RepaymentServiceImpl implements RepaymentService {
 
     @Override
     public RepaymentDTO updateRepayment(RepaymentDTO repaymentDTO) {
-        // Check if repayment exists
         repaymentRepository.findById(repaymentDTO.getId())
                 .orElseThrow(() -> new RuntimeException("Repayment not found with id: " + repaymentDTO.getId()));
         
         Repayment repayment = repaymentMapper.toRepayment(repaymentDTO);
         
-        // Set credit if creditId is provided
         if (repaymentDTO.getCreditId() != null) {
             Credit credit = creditRepository.findById(repaymentDTO.getCreditId())
                     .orElseThrow(() -> new RuntimeException("Credit not found with id: " + repaymentDTO.getCreditId()));
@@ -83,34 +79,20 @@ public class RepaymentServiceImpl implements RepaymentService {
 
     @Override
     public void deleteRepayment(Long id) {
-        // Check if repayment exists
         repaymentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Repayment not found with id: " + id));
         
         repaymentRepository.deleteById(id);
     }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public List<RepaymentDTO> getRepaymentsByCreditId(Long creditId) {
-        // Check if credit exists
         creditRepository.findById(creditId)
                 .orElseThrow(() -> new RuntimeException("Credit not found with id: " + creditId));
         
         List<Repayment> repayments = repaymentRepository.findAll().stream()
                 .filter(repayment -> repayment.getCredit() != null && repayment.getCredit().getId().equals(creditId))
-                .collect(Collectors.toList());
-        
-        return repayments.stream()
-                .map(repaymentMapper::fromRepayment)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<RepaymentDTO> getRepaymentsByDateRange(Date startDate, Date endDate) {
-        List<Repayment> repayments = repaymentRepository.findAll().stream()
-                .filter(repayment -> repayment.getRepaymentDate() != null 
-                        && !repayment.getRepaymentDate().before(startDate) 
-                        && !repayment.getRepaymentDate().after(endDate))
                 .collect(Collectors.toList());
         
         return repayments.stream()
@@ -120,7 +102,6 @@ public class RepaymentServiceImpl implements RepaymentService {
 
     @Override
     public double calculateTotalRepaymentAmount(Long creditId) {
-        // Check if credit exists
         creditRepository.findById(creditId)
                 .orElseThrow(() -> new RuntimeException("Credit not found with id: " + creditId));
         
@@ -130,14 +111,4 @@ public class RepaymentServiceImpl implements RepaymentService {
                 .sum();
     }
 
-    @Override
-    public double calculateRemainingAmount(Long creditId) {
-        Credit credit = creditRepository.findById(creditId)
-                .orElseThrow(() -> new RuntimeException("Credit not found with id: " + creditId));
-        
-        double totalAmount = credit.getAmount();
-        double totalRepaid = calculateTotalRepaymentAmount(creditId);
-        
-        return totalAmount - totalRepaid;
-    }
 }

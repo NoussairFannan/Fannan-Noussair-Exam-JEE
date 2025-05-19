@@ -9,25 +9,19 @@ import ma.enset.backend.enums.CreditStatus;
 import java.util.List;
 
 public interface CreditService {
-    // CRUD operations
     CreditDTO getCreditById(Long id);
     List<CreditDTO> getAllCredits();
     CreditDTO saveCredit(CreditDTO creditDTO);
     CreditDTO updateCredit(CreditDTO creditDTO);
     void deleteCredit(Long id);
     
-    // Specific credit type operations
     PersonalCreditDTO savePersonalCredit(PersonalCreditDTO personalCreditDTO);
     ProfessionalCreditDTO saveProfessionalCredit(ProfessionalCreditDTO professionalCreditDTO);
     RealEstateCreditDTO saveRealEstateCredit(RealEstateCreditDTO realEstateCreditDTO);
     
-    // Additional business operations
     List<CreditDTO> getCreditsByClientId(Long clientId);
     List<CreditDTO> getCreditsByStatus(CreditStatus status);
     CreditDTO updateCreditStatus(Long creditId, CreditStatus status);
-    
-    // Credit analysis operations
+
     double calculateTotalCreditAmount();
-    double calculateMonthlyPayment(Long creditId);
-    double calculateTotalInterest(Long creditId);
 }

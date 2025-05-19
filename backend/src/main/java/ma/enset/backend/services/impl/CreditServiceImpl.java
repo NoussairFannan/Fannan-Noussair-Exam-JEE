@@ -186,7 +186,7 @@ public class CreditServiceImpl implements CreditService {
         List<Credit> credits = creditRepository.findAll().stream()
                 .filter(credit -> credit.getStatus() == status)
                 .collect(Collectors.toList());
-        
+
         return credits.stream()
                 .map(creditMapper::fromCredit)
                 .collect(Collectors.toList());
@@ -215,36 +215,4 @@ public class CreditServiceImpl implements CreditService {
                 .sum();
     }
 
-    @Override
-    public double calculateMonthlyPayment(Long creditId) {
-        Credit credit = creditRepository.findById(creditId)
-                .orElseThrow(() -> new RuntimeException("Credit not found with id: " + creditId));
-        
-        // Simple monthly payment calculation (principal + interest) / duration in months
-        double principal = credit.getAmount();
-        double monthlyInterestRate = credit.getInterestRate() / 100 / 12; // Convert annual rate to monthly
-        int durationInMonths = credit.getRepaymentDuration();
-        
-        // Using the formula for fixed monthly payments (amortization)
-        // M = P * (r * (1 + r)^n) / ((1 + r)^n - 1)
-        // where M is the monthly payment, P is the principal, r is the monthly interest rate, and n is the number of months
-        
-        double numerator = monthlyInterestRate * Math.pow(1 + monthlyInterestRate, durationInMonths);
-        double denominator = Math.pow(1 + monthlyInterestRate, durationInMonths) - 1;
-        
-        return principal * (numerator / denominator);
-    }
-
-    @Override
-    public double calculateTotalInterest(Long creditId) {
-        Credit credit = creditRepository.findById(creditId)
-                .orElseThrow(() -> new RuntimeException("Credit not found with id: " + creditId));
-        
-        // Calculate total interest as (monthly payment * duration in months) - principal
-        double monthlyPayment = calculateMonthlyPayment(creditId);
-        int durationInMonths = credit.getRepaymentDuration();
-        double principal = credit.getAmount();
-        
-        return (monthlyPayment * durationInMonths) - principal;
-    }
 }
