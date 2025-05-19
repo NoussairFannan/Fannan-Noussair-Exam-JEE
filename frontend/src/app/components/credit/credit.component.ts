@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { DatePipe, CurrencyPipe } from '@angular/common';
 
 interface Credit {
   id?: number;
@@ -28,7 +29,7 @@ interface Client {
   templateUrl: './credit.component.html',
   styleUrl: './credit.component.css',
   standalone: true,
-  imports: [FormsModule]
+  imports: [FormsModule, DatePipe, CurrencyPipe]
 })
 export class CreditComponent implements OnInit {
   credits: Credit[] = [];
@@ -43,8 +44,8 @@ export class CreditComponent implements OnInit {
     type: 'PERSONNEL'
   };
   isEditing = false;
-  private apiUrl = 'http://localhost:8080/credits';
-  private clientApiUrl = 'http://localhost:8080/clients';
+  private apiUrl = 'http://localhost:8080/api/credits';
+  private clientApiUrl = 'http://localhost:8080/api/clients';
 
   constructor(private http: HttpClient) {}
 

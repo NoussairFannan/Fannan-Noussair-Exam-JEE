@@ -203,3 +203,39 @@ backend/
 4. Lancer l'application avec `mvn spring-boot:run`
 
 # Application de Gestion de Crédits Bancaires - frontend
+### Interface Utilisateur
+
+#### Navigation
+```html
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">{{ title }}</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/clients" routerLinkActive="active">Clients</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/credits" routerLinkActive="active">Crédits</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/remboursements" routerLinkActive="active">Remboursements</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+```
+#### Caractéristiques de l'Interface
+- Barre de navigation responsive avec Bootstrap
+- Navigation fluide entre les composants
+- Indication visuelle de la page active
+- Design moderne et professionnel
+- Interface adaptative pour tous les appareils
+- Formulaires intuitifs avec validation
+- Messages de confirmation pour les actions importantes
+- Gestion des erreurs avec feedback utilisateur
+
