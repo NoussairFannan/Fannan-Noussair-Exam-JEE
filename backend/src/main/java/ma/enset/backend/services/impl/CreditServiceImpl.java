@@ -49,14 +49,14 @@ public class CreditServiceImpl implements CreditService {
     @Override
     public CreditDTO saveCredit(CreditDTO creditDTO) {
         Credit credit = creditMapper.toCredit(creditDTO);
-        
+
         // Set client if clientId is provided
         if (creditDTO.getClientId() != null) {
             Client client = clientRepository.findById(creditDTO.getClientId())
                     .orElseThrow(() -> new RuntimeException("Client not found with id: " + creditDTO.getClientId()));
             credit.setClient(client);
         }
-        
+
         // Set default values if not provided
         if (credit.getRequestDate() == null) {
             credit.setRequestDate(new Date());
@@ -64,7 +64,7 @@ public class CreditServiceImpl implements CreditService {
         if (credit.getStatus() == null) {
             credit.setStatus(CreditStatus.IN_PROGRESS);
         }
-        
+
         Credit savedCredit = creditRepository.save(credit);
         return creditMapper.fromCredit(savedCredit);
     }
@@ -74,16 +74,16 @@ public class CreditServiceImpl implements CreditService {
         // Check if credit exists
         creditRepository.findById(creditDTO.getId())
                 .orElseThrow(() -> new RuntimeException("Credit not found with id: " + creditDTO.getId()));
-        
+
         Credit credit = creditMapper.toCredit(creditDTO);
-        
+
         // Set client if clientId is provided
         if (creditDTO.getClientId() != null) {
             Client client = clientRepository.findById(creditDTO.getClientId())
                     .orElseThrow(() -> new RuntimeException("Client not found with id: " + creditDTO.getClientId()));
             credit.setClient(client);
         }
-        
+
         Credit updatedCredit = creditRepository.save(credit);
         return creditMapper.fromCredit(updatedCredit);
     }
@@ -93,21 +93,21 @@ public class CreditServiceImpl implements CreditService {
         // Check if credit exists
         creditRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Credit not found with id: " + id));
-        
+
         creditRepository.deleteById(id);
     }
 
     @Override
     public PersonalCreditDTO savePersonalCredit(PersonalCreditDTO personalCreditDTO) {
         Credit credit = creditMapper.toCredit(personalCreditDTO);
-        
+
         // Set client if clientId is provided
         if (personalCreditDTO.getClientId() != null) {
             Client client = clientRepository.findById(personalCreditDTO.getClientId())
                     .orElseThrow(() -> new RuntimeException("Client not found with id: " + personalCreditDTO.getClientId()));
             credit.setClient(client);
         }
-        
+
         // Set default values if not provided
         if (credit.getRequestDate() == null) {
             credit.setRequestDate(new Date());
@@ -115,7 +115,7 @@ public class CreditServiceImpl implements CreditService {
         if (credit.getStatus() == null) {
             credit.setStatus(CreditStatus.IN_PROGRESS);
         }
-        
+
         Credit savedCredit = creditRepository.save(credit);
         return (PersonalCreditDTO) creditMapper.fromCredit(savedCredit);
     }
@@ -123,14 +123,14 @@ public class CreditServiceImpl implements CreditService {
     @Override
     public ProfessionalCreditDTO saveProfessionalCredit(ProfessionalCreditDTO professionalCreditDTO) {
         Credit credit = creditMapper.toCredit(professionalCreditDTO);
-        
+
         // Set client if clientId is provided
         if (professionalCreditDTO.getClientId() != null) {
             Client client = clientRepository.findById(professionalCreditDTO.getClientId())
                     .orElseThrow(() -> new RuntimeException("Client not found with id: " + professionalCreditDTO.getClientId()));
             credit.setClient(client);
         }
-        
+
         // Set default values if not provided
         if (credit.getRequestDate() == null) {
             credit.setRequestDate(new Date());
@@ -138,7 +138,7 @@ public class CreditServiceImpl implements CreditService {
         if (credit.getStatus() == null) {
             credit.setStatus(CreditStatus.IN_PROGRESS);
         }
-        
+
         Credit savedCredit = creditRepository.save(credit);
         return (ProfessionalCreditDTO) creditMapper.fromCredit(savedCredit);
     }
@@ -146,14 +146,14 @@ public class CreditServiceImpl implements CreditService {
     @Override
     public RealEstateCreditDTO saveRealEstateCredit(RealEstateCreditDTO realEstateCreditDTO) {
         Credit credit = creditMapper.toCredit(realEstateCreditDTO);
-        
+
         // Set client if clientId is provided
         if (realEstateCreditDTO.getClientId() != null) {
             Client client = clientRepository.findById(realEstateCreditDTO.getClientId())
                     .orElseThrow(() -> new RuntimeException("Client not found with id: " + realEstateCreditDTO.getClientId()));
             credit.setClient(client);
         }
-        
+
         // Set default values if not provided
         if (credit.getRequestDate() == null) {
             credit.setRequestDate(new Date());
@@ -161,7 +161,7 @@ public class CreditServiceImpl implements CreditService {
         if (credit.getStatus() == null) {
             credit.setStatus(CreditStatus.IN_PROGRESS);
         }
-        
+
         Credit savedCredit = creditRepository.save(credit);
         return (RealEstateCreditDTO) creditMapper.fromCredit(savedCredit);
     }
@@ -171,11 +171,11 @@ public class CreditServiceImpl implements CreditService {
         // Check if client exists
         clientRepository.findById(clientId)
                 .orElseThrow(() -> new RuntimeException("Client not found with id: " + clientId));
-        
+
         List<Credit> credits = creditRepository.findAll().stream()
                 .filter(credit -> credit.getClient() != null && credit.getClient().getId().equals(clientId))
                 .collect(Collectors.toList());
-        
+
         return credits.stream()
                 .map(creditMapper::fromCredit)
                 .collect(Collectors.toList());
@@ -196,14 +196,14 @@ public class CreditServiceImpl implements CreditService {
     public CreditDTO updateCreditStatus(Long creditId, CreditStatus status) {
         Credit credit = creditRepository.findById(creditId)
                 .orElseThrow(() -> new RuntimeException("Credit not found with id: " + creditId));
-        
+
         credit.setStatus(status);
-        
+
         // If status is ACCEPTED, set acceptance date
         if (status == CreditStatus.ACCEPTED) {
             credit.setAcceptanceDate(new Date());
         }
-        
+
         Credit updatedCredit = creditRepository.save(credit);
         return creditMapper.fromCredit(updatedCredit);
     }
@@ -214,5 +214,6 @@ public class CreditServiceImpl implements CreditService {
                 .mapToDouble(Credit::getAmount)
                 .sum();
     }
+
 
 }

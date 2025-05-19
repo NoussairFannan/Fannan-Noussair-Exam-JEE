@@ -11,7 +11,8 @@ public interface ClientService {
     ClientDTO saveClient(ClientDTO clientDTO);
     ClientDTO updateClient(ClientDTO clientDTO);
     void deleteClient(Long id);
-    
+
     // Additional business operations
+    List<ClientDTO> searchClientsByName(String name);
     List<ClientDTO> getClientsWithCredits();
 }

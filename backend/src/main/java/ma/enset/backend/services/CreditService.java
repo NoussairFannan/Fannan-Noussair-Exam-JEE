@@ -14,11 +14,11 @@ public interface CreditService {
     CreditDTO saveCredit(CreditDTO creditDTO);
     CreditDTO updateCredit(CreditDTO creditDTO);
     void deleteCredit(Long id);
-    
+
     PersonalCreditDTO savePersonalCredit(PersonalCreditDTO personalCreditDTO);
     ProfessionalCreditDTO saveProfessionalCredit(ProfessionalCreditDTO professionalCreditDTO);
     RealEstateCreditDTO saveRealEstateCredit(RealEstateCreditDTO realEstateCreditDTO);
-    
+
     List<CreditDTO> getCreditsByClientId(Long clientId);
     List<CreditDTO> getCreditsByStatus(CreditStatus status);
     CreditDTO updateCreditStatus(Long creditId, CreditStatus status);

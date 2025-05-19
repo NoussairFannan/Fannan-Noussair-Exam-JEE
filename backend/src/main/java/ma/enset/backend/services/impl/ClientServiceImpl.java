@@ -48,7 +48,7 @@ public class ClientServiceImpl implements ClientService {
     public ClientDTO updateClient(ClientDTO clientDTO) {
         clientRepository.findById(clientDTO.getId())
                 .orElseThrow(() -> new RuntimeException("Client not found with id: " + clientDTO.getId()));
-        
+
         Client client = clientMapper.toClient(clientDTO);
         Client updatedClient = clientRepository.save(client);
         return clientMapper.fromClient(updatedClient);
@@ -58,18 +58,27 @@ public class ClientServiceImpl implements ClientService {
     public void deleteClient(Long id) {
         clientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Client not found with id: " + id));
-        
+
         clientRepository.deleteById(id);
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public List<ClientDTO> searchClientsByName(String name) {
+        List<Client> clients = clientRepository.findAll().stream()
+                .filter(client -> client.getName().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toList());
+
+        return clients.stream()
+                .map(clientMapper::fromClient)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public List<ClientDTO> getClientsWithCredits() {
         List<Client> clients = clientRepository.findAll().stream()
                 .filter(client -> client.getCredits() != null && !client.getCredits().isEmpty())
                 .collect(Collectors.toList());
-        
+
         return clients.stream()
                 .map(clientMapper::fromClient)
                 .collect(Collectors.toList());

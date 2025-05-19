@@ -45,17 +45,17 @@ public class RepaymentServiceImpl implements RepaymentService {
     @Override
     public RepaymentDTO saveRepayment(RepaymentDTO repaymentDTO) {
         Repayment repayment = repaymentMapper.toRepayment(repaymentDTO);
-        
+
         if (repaymentDTO.getCreditId() != null) {
             Credit credit = creditRepository.findById(repaymentDTO.getCreditId())
                     .orElseThrow(() -> new RuntimeException("Credit not found with id: " + repaymentDTO.getCreditId()));
             repayment.setCredit(credit);
         }
-        
+
         if (repayment.getRepaymentDate() == null) {
             repayment.setRepaymentDate(new Date());
         }
-        
+
         Repayment savedRepayment = repaymentRepository.save(repayment);
         return repaymentMapper.fromRepayment(savedRepayment);
     }
@@ -64,15 +64,15 @@ public class RepaymentServiceImpl implements RepaymentService {
     public RepaymentDTO updateRepayment(RepaymentDTO repaymentDTO) {
         repaymentRepository.findById(repaymentDTO.getId())
                 .orElseThrow(() -> new RuntimeException("Repayment not found with id: " + repaymentDTO.getId()));
-        
+
         Repayment repayment = repaymentMapper.toRepayment(repaymentDTO);
-        
+
         if (repaymentDTO.getCreditId() != null) {
             Credit credit = creditRepository.findById(repaymentDTO.getCreditId())
                     .orElseThrow(() -> new RuntimeException("Credit not found with id: " + repaymentDTO.getCreditId()));
             repayment.setCredit(credit);
         }
-        
+
         Repayment updatedRepayment = repaymentRepository.save(repayment);
         return repaymentMapper.fromRepayment(updatedRepayment);
     }
@@ -81,7 +81,7 @@ public class RepaymentServiceImpl implements RepaymentService {
     public void deleteRepayment(Long id) {
         repaymentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Repayment not found with id: " + id));
-        
+
         repaymentRepository.deleteById(id);
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,11 +90,11 @@ public class RepaymentServiceImpl implements RepaymentService {
     public List<RepaymentDTO> getRepaymentsByCreditId(Long creditId) {
         creditRepository.findById(creditId)
                 .orElseThrow(() -> new RuntimeException("Credit not found with id: " + creditId));
-        
+
         List<Repayment> repayments = repaymentRepository.findAll().stream()
                 .filter(repayment -> repayment.getCredit() != null && repayment.getCredit().getId().equals(creditId))
                 .collect(Collectors.toList());
-        
+
         return repayments.stream()
                 .map(repaymentMapper::fromRepayment)
                 .collect(Collectors.toList());
@@ -104,7 +104,7 @@ public class RepaymentServiceImpl implements RepaymentService {
     public double calculateTotalRepaymentAmount(Long creditId) {
         creditRepository.findById(creditId)
                 .orElseThrow(() -> new RuntimeException("Credit not found with id: " + creditId));
-        
+
         return repaymentRepository.findAll().stream()
                 .filter(repayment -> repayment.getCredit() != null && repayment.getCredit().getId().equals(creditId))
                 .mapToDouble(Repayment::getAmount)
