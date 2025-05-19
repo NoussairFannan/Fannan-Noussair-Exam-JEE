@@ -18,6 +18,6 @@ public class Client {
     private Long id;
     private String name;
     private String email;
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     private List<Credit> credits = new ArrayList<>();
 }
